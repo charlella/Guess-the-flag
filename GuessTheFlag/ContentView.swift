@@ -19,6 +19,9 @@ struct ContentView: View {
     @State private var questionCounter = 1
     @State private var score = 0
     
+    @State private var selectedFlag = -1
+
+    
     var body: some View {
         ZStack {
             RadialGradient(stops: [
@@ -48,6 +51,8 @@ struct ContentView: View {
                             flagTapped(number)
                         } label: {
                             FlagImage(name: countries[number])
+                                .rotation3DEffect(.degrees(selectedFlag == number ? 360 : 0), axis: (x: 0, y: 1, z: 0))
+                                .animation(.default, value: selectedFlag)
                         }
                     }
                 }
@@ -98,7 +103,8 @@ struct ContentView: View {
                     score -= 1
                 }
             }
-            }
+        }
+        selectedFlag = number
     
         if questionCounter == 8 {
             showResults = true
@@ -112,6 +118,7 @@ struct ContentView: View {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
         questionCounter += 1
+        selectedFlag = -1
     }
     
     func newGame() {
